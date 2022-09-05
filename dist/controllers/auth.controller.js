@@ -14,8 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.profile = exports.signin = exports.signup = void 0;
 const User_1 = __importDefault(require("../models/User"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //console.log(req.body)
+    //user
     const user = new User_1.default({
         username: req.body.username,
         email: req.body.email,
@@ -23,7 +24,9 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
     const savedUser = yield user.save();
     console.log(savedUser);
-    res.send('signup');
+    // token
+    const token = jsonwebtoken_1.default.sign({ _id: savedUser._id }, process.env.TOKEN_SECRET || 'tokentest');
+    res.header('auth-token', token).json(savedUser);
 });
 exports.signup = signup;
 const signin = (req, res) => {
