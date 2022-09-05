@@ -1,6 +1,15 @@
 import { Request, Response } from "express"
+import User, { IUser } from '../models/User'
 
-export const signup = (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response) => {
+  //console.log(req.body)
+  const user: IUser = new User({
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password
+  })
+  const savedUser = await user.save()
+  console.log(savedUser)
   res.send('signup')
 }
 
