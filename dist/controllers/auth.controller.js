@@ -16,23 +16,44 @@ exports.profile = exports.signin = exports.signup = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //user
-    const user = new User_1.default({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-    });
-    user.password = yield user.encryptPassword(user.password);
-    const savedUser = yield user.save();
-    //console.log(savedUser)
-    // token
-    const token = jsonwebtoken_1.default.sign({ _id: savedUser._id }, process.env.TOKEN_SECRET || 'tokentest');
-    res.header('auth-token', token).json(savedUser);
+    try {
+        // user
+        const user = new User_1.default({
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+        });
+        user.password = yield user.encryptPassword(user.password);
+        const savedUser = yield user.save();
+        // token
+        const token = jsonwebtoken_1.default.sign({ _id: savedUser._id }, process.env.TOKEN_SECRET || 'tokentest');
+        res.header('auth-token', token).json(savedUser);
+    }
+    catch (error) {
+        res.status(400).json(error.message);
+    }
 });
 exports.signup = signup;
-const signin = (req, res) => {
-    res.send('signin');
-};
+const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // validate user by email
+        const user = yield User_1.default.findOne({ email: req.body.email });
+        if (!user)
+            return res.status(400).json("Email or password is wrong");
+        // validate password
+        const correctPassword = yield user.validatePassword(req.body.password);
+        if (!correctPassword)
+            return res.status(400).json("Invalid password");
+        // generate token
+        const token = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.TOKEN_SECRET || 'tokentest', {
+            expiresIn: 60 * 60 * 24 // se expresa en segundo, el resultado equivale a 1 dia
+        });
+        res.header('auth-token', token).json(user);
+    }
+    catch (error) {
+        res.status(400).json(error.message);
+    }
+});
 exports.signin = signin;
 const profile = (req, res) => {
     res.send('profile');
