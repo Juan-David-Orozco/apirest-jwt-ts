@@ -1,6 +1,5 @@
 import { Request, Response } from "express"
 import User, { IUser } from '../models/User'
-
 import jwt from 'jsonwebtoken'
 
 export const signup = async (req: Request, res: Response) => {
@@ -39,6 +38,13 @@ export const signin = async (req: Request, res: Response) => {
   }
 }
 
-export const profile = (req: Request, res: Response) => {
-  res.send('profile')
+export const profile = async (req: Request, res: Response) => {
+  //console.log(req.header('auth-token'))
+  const user = await User.findById(req.userId, { password: 0 })
+  if (!user) return res.status(404).json("User not found")
+  res.json(user)
+}
+
+export const testing = async (req: Request, res: Response) => {
+  res.json("private")
 }

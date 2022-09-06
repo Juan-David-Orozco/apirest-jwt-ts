@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.profile = exports.signin = exports.signup = void 0;
+exports.testing = exports.profile = exports.signin = exports.signup = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,8 +55,16 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.signin = signin;
-const profile = (req, res) => {
-    res.send('profile');
-};
+const profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //console.log(req.header('auth-token'))
+    const user = yield User_1.default.findById(req.userId, { password: 0 });
+    if (!user)
+        return res.status(404).json("User not found");
+    res.json(user);
+});
 exports.profile = profile;
+const testing = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json("private");
+});
+exports.testing = testing;
 //# sourceMappingURL=auth.controller.js.map
