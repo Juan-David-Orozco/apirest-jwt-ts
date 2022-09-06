@@ -10,11 +10,12 @@ export const signup = async (req: Request, res: Response) => {
     email: req.body.email,
     password: req.body.password
   })
+  user.password = await user.encryptPassword(user.password)
   const savedUser = await user.save()
-  console.log(savedUser)
+  //console.log(savedUser)
+
   // token
   const token: string = jwt.sign({_id: savedUser._id}, process.env.TOKEN_SECRET || 'tokentest')
-
   res.header('auth-token', token).json(savedUser)
 }
 
