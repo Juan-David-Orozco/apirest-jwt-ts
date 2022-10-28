@@ -1,11 +1,12 @@
 import express, { Application } from 'express';
 import morgan from 'morgan'
 import authRoutes from './routes/auth'
+import { PORT } from './config'
 
 const app: Application = express();
 
 // settings
-app.set('port', 4000);
+app.set('port', PORT);
 
 // middlewares
 app.use(morgan('dev'));
