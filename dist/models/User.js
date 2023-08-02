@@ -38,6 +38,7 @@ userSchema.methods.encryptPassword = (password) => __awaiter(void 0, void 0, voi
 });
 userSchema.methods.validatePassword = function (password) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(password, this.password);
         return yield bcryptjs_1.default.compare(password, this.password);
     });
 };

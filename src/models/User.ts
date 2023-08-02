@@ -34,6 +34,7 @@ userSchema.methods.encryptPassword = async (password: string): Promise<string> =
 }
 
 userSchema.methods.validatePassword = async function (password: string): Promise<boolean> {
+  console.log(password, this.password)
   return await bcrypt.compare(password, this.password) 
 }
 

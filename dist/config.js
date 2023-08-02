@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PORT = exports.MONGODB_URI = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-exports.MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/api_jwt_ts";
+exports.MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/api_jwt_ts";
 exports.PORT = process.env.PORT || 4000;
 //# sourceMappingURL=config.js.map
